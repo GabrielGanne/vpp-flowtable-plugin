@@ -1,0 +1,8 @@
+autoreconf -i -f
+mkdir build
+pushd build
+../configure --prefix=/usr
+make
+sudo make install
+popd
+

@@ -1,0 +1,19 @@
+
+AC_INIT(portmirroring_plugin, 0.9)
+AM_INIT_AUTOMAKE
+
+AC_PROG_LIBTOOL
+AM_PROG_AS
+AC_PROG_CC
+AM_PROG_CC_C_O
+AC_ARG_WITH(plugin-toolkit,
+            AC_HELP_STRING([--with-plugin-toolkit],
+            [build using the vpp toolkit]),
+            [with_plugin_toolkit=${prefix}/include],
+            [with_plugin_toolkit=.])
+
+AM_CONDITIONAL([VPP_ROOT], [test ! -z "$VPP_ROOT"])
+
+AC_SUBST(TOOLKIT_INCLUDE,[${with_plugin_toolkit}])
+AM_CONDITIONAL(WITH_PLUGIN_TOOLKIT, test "$with_plugin_toolkit" != ".")
+AC_OUTPUT([Makefile])
