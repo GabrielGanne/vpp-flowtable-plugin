@@ -17,7 +17,7 @@
 #ifndef __flowtable_tcp_h__
 #define __flowtable_tcp_h__
 
-#include <vnet/ip/tcp_packet.h>
+#include <vnet/tcp/tcp_packet.h>
 
 typedef enum tcp_state {
     TCP_STATE_START,
