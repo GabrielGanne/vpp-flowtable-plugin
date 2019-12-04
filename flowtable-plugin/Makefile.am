@@ -41,29 +41,30 @@ nobase_include_HEADERS = \
 	flowtable/flowdata.h \
 	flowtable/flowtable.api.h
 
-BUILT_SOURCES = \
-	flowtable/flowtable.api.h \
-	flowtable/flowtable.api.json
-
 flowtable_plugin_la_LDFLAGS = -module
 
-SUFFIXES = .api.h .api
+SUFFIXES = .api.h .api .api.json
 
 %.api.h: %.api
 	mkdir -p `dirname $@` ;                          \
-	$(CC) $(CPPFLAGS) -E -P -C -x c $^               \
-	| $(VPPAPIGEN) --input - --output $@ --show-name $@
+	vppapigen --input $^ --output $@ --outputdir=flowtable
 
 %.api.json: %.api
 	@echo "  JSON APIGEN  " $@ ;                     \
 	mkdir -p `dirname $@` ;                          \
-	$(CC) $(CPPFLAGS) -E -P -C -x c $^               \
-	| $(VPPAPIGEN) --input - --json $@
+	vppapigen --input $^ JSON --output $@ --outputdir=flowtable
 
-apidir = $(prefix)/usr/share/vpp/api/
-api_DATA = flowtable/flowtable.api.json
+apidir = $(prefix)/api/plugins
+apiincludedir = ${includedir}/vpp_plugins
+api_DATA = \
+	$(patsubst %.api,%.api.json,$(API_FILES))
+
+BUILT_SOURCES = \
+	$(patsubst %.api,%.api.h,$(API_FILES))
 
 install-data-hook:
 	mkdir $(libdir)/vpp_plugins || true
 	cp $(libdir)/flowtable_plugin.so.*.*.* $(libdir)/vpp_plugins/flowtable_plugin.so
 	rm -f $(libdir)/flowtable_plugin.*
+
+CLEANFILES = $(BUILT_SOURCES)
