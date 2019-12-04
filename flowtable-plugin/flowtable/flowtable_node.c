@@ -631,7 +631,7 @@ flowtable_process(vlib_main_t * vm,
 {
     u32 n_left_from, * from, next_index, * to_next, n_left_to_next;
     flowtable_main_t * fm = &flowtable_main;
-    u32 cpu_index = os_get_cpu_number();
+    u32 cpu_index = vlib_get_thread_index();
     flowtable_main_per_cpu_t * fmt = &fm->per_cpu[cpu_index];
 
 #define _(sym, str) u32 CPT_ ## sym = 0;
